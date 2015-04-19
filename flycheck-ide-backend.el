@@ -49,8 +49,8 @@ CALLBACK is the status callback passed by Flycheck."
      (lambda (_ reply)
        (condition-case err
            (let ((errors (mapcar
-                          (lambda (item)
-                            (flycheck-ide-backend-parse-error item checker buffer project-dir))
+                          (lambda (item) (flycheck-ide-backend-parse-error
+                                          item checker buffer project-dir))
                           (cdr (assoc 'errors reply)))))
              (funcall callback 'finished (delq nil errors)))
          (error (funcall callback 'errored (error-message-string err))))
@@ -85,13 +85,11 @@ Return the corresponding `flycheck-error'."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utility functions
-;; These are 99% copied from ide-backend mode, but since not custom callbacks
-;; can be supplied for the error checking function after loading
-;; the current file, these have to be copied and slightly modified
-;; Remove if ide-backend-mode changes to supply custom callbacks.
+;; These are mostly copied from ide-backend mode, but since not custom callbacks
+;; can be supplied for the error checking function after loading the current
+;; file, these have to be copied and slightly modified
 (defun flycheck-ide-backend-mode-load (callback)
   "Load the current buffer's file."
-  (interactive)
   (let ((filename (buffer-file-name)))
     (with-current-buffer (ide-backend-mode-buffer)
       (flycheck-ide-backend-mode-update-file
