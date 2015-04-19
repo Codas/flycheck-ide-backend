@@ -129,7 +129,7 @@ Return the corresponding `flycheck-error'."
   "A syntax and type checker for Haskell using ide-backend-mode."
   :start 'flycheck-ide-backend-start
   :modes '(haskell-mode)
-  :predicate (lambda () ide-backend-mode)
+  :predicate (lambda () (and (flycheck-buffer-saved-p) ide-backend-mode))
   :next-checkers '((warning . haskell-hlint)))
 
 ;;;###autoload
